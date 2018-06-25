@@ -2,6 +2,7 @@ package com.forme.sbforme.controller;
 
 
 import com.forme.sbforme.domain.Girl;
+import com.forme.sbforme.domain.Result;
 import com.forme.sbforme.repository.GirlRepository;
 import com.forme.sbforme.service.GirlService;
 import org.slf4j.Logger;
@@ -29,14 +30,20 @@ public class GirlController {
     }
 
     @PostMapping(value = "/girls")
-    public Girl girlAdd(@Valid Girl girl, BindingResult bindingResult){
+    public Result<Girl> girlAdd(@Valid Girl girl, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            System.out.println(bindingResult.getFieldError().getDefaultMessage());
-            return null;
+            Result result = new Result();
+            result.setCode(1);
+            result.setMsg(bindingResult.getFieldError().getDefaultMessage());
+            return result;
         }
+        Result result = new Result();
         girl.setCupSize(girl.getCupSize());
         girl.setAge(girl.getAge());
-       return girlRepository.save(girl);
+        result.setCode(0);
+        result.setMsg("success");
+        result.setData(girlRepository.save(girl));
+        return result;
     }
 
     @GetMapping(value = "/girls/{id}")
