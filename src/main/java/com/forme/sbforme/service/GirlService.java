@@ -38,4 +38,9 @@ public class GirlService {
             throw new GirlException(ResultEnum.ERROR_SECONDARY);
         }
     }
+
+
+    public Girl findOne(Integer id){
+        return girlRepository.findById(id).get();
+    }
 }
